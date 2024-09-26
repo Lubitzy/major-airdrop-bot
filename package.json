@@ -7,9 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "airdrop",
+    "major",
+    "automation",
+    "bot",
+    "telegram"
+  ],
+  "author": "Gustio",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.7.7",
     "colors": "^1.4.0",
