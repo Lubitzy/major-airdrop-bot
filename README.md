@@ -34,11 +34,11 @@
    npm install
    ```
 
-5. Add "SESSION_KEY_1" and so on into the index.js file
+4. Add "SESSION_KEY_1" and so on into the index.js file
 
    ```
    Example:
-   
+
    async function selectAccount() {
     const sessionKeys = [
         process.env.SESSION_KEY_1,
@@ -48,7 +48,7 @@
 
    ```
 
-4. Create a `.env` file in the root directory and add your Major API token:
+5. Create a `.env` file in the root directory and add your Major API token:
 
    ```
    Example:
@@ -59,7 +59,7 @@
 
    ```
 
-5. Start the application:
+6. Start the application:
 
    ```
    npm start
