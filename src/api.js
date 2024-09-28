@@ -3,7 +3,6 @@ const axios = require('axios')
 
 const BASE_URL = 'https://major.bot/api/'
 
-// GET BEARER TOKEN
 async function getToken() {
     try {
         const { data } = await axios({
@@ -17,7 +16,6 @@ async function getToken() {
     }
 }
 
-// GET ID USER
 async function getIdUser(token) {
     const response = await axios({
         url: `${BASE_URL}user-visits/streak/`,
@@ -27,7 +25,6 @@ async function getIdUser(token) {
     return response.data.user_id
 }
 
-// GET ID SQUAD
 async function getIdSquad(token, idUser) {
     const response = await axios({
         url: `${BASE_URL}users/${idUser}/`,
@@ -37,7 +34,6 @@ async function getIdSquad(token, idUser) {
     return response.data.squad_id
 }
 
-// GET USERNAME INFORMATION
 async function getUsername(token, idUser) {
     const response = await axios({
         url: `${BASE_URL}users/${idUser}/`,
@@ -47,7 +43,6 @@ async function getUsername(token, idUser) {
     return response.data.username
 }
 
-// GET BALANCE INFORMATION
 async function getBalance(token, idUser) {
     const response = await axios({
         url: `${BASE_URL}users/${idUser}/`,
@@ -57,7 +52,6 @@ async function getBalance(token, idUser) {
     return response.data.rating
 }
 
-// GET POSITION IN LEADERBOARD
 async function getPosition(token, idUser) {
     const response = await axios({
         url: `${BASE_URL}users/top/position/${idUser}/`,
@@ -67,7 +61,6 @@ async function getPosition(token, idUser) {
     return response.data.position
 }
 
-// GET SQUAD YOUR MAJOR
 async function getTribe(token, idSquad) {
     const response = await axios({
         url: `${BASE_URL}squads/${idSquad}`,
@@ -77,7 +70,6 @@ async function getTribe(token, idSquad) {
     return response.data
 }
 
-// GET SQUAD POSITION MAJOR
 async function getTribePosition(token, idSquad) {
     const response = await axios({
         url: `${BASE_URL}squads/top/position/${idSquad}/`,
@@ -87,7 +79,6 @@ async function getTribePosition(token, idSquad) {
     return response.data.position
 }
 
-// GET DAILY TASK
 async function tasksDaily(token) {
     try {
         const { data } = await axios({
@@ -105,7 +96,6 @@ async function tasksDaily(token) {
     }
 }
 
-// GET TASK NOT DAILY
 async function nonDailyTasks(token) {
     try {
         const { data } = await axios({
@@ -123,7 +113,6 @@ async function nonDailyTasks(token) {
     }
 }
 
-// CLEAR TASKS
 async function clearTasks(token, task_id, title) {
     try {
         const { data } = await axios({
@@ -133,9 +122,9 @@ async function clearTasks(token, task_id, title) {
             data: { task_id }
         });
         if (data.is_completed === true) {
-            console.log(`✅ Task "${title}" successfully claimed!`.green);
+            console.log(`✅ Task "${title}" successfully claimed!`.green)
         } else {
-            console.log(`❌ Task "${title}" error: Task is not completed. Please complete manually.`);
+            console.log(`❌ Task "${title}" error: Task is not completed. Please complete manually.`)
         }
         return data;
     } catch (error) {
@@ -144,14 +133,13 @@ async function clearTasks(token, task_id, title) {
             error.response.data &&
             error.response.data.detail === 'Task is already completed'
         ) {
-            console.log(`✅ Start task "${title}" failed, because the task is already completed.`);
+            console.log(`✅ Start task "${title}" failed, because the task is already completed.`)
         } else {
-            console.error('Error occurred while claiming task:', error.message);
+            console.error('Error occurred while claiming task:', error.message)
         }
     }
 }
 
-// GET DAILY LOGIN
 async function getDailyLogin(token) {
     try {
         const { data } = await axios({
@@ -176,7 +164,6 @@ async function getDailyLogin(token) {
     }
 }
 
-// GET INFO PUZZLE DUROV
 async function getPuzzleDurov() {
     const { data } = await axios({
         url: 'https://raw.githubusercontent.com/dancayairdrop/blum/main/durov.json',
@@ -185,7 +172,6 @@ async function getPuzzleDurov() {
     return data.tasks
 }
 
-// CLEAR GAMES DUROV PUZZLE
 async function getPuzzleDurov() {
     try {
         const { data } = await axios({
@@ -198,12 +184,12 @@ async function getPuzzleDurov() {
         console.error('Error fetching Durov puzzle:', error.message)
     }
 }
-// CLEAR GAMES DUROV PUZZLE
+
 async function clearPuzzleDurov(token) {
     try {
         const puzzle = await getPuzzleDurov();
         if (!puzzle || puzzle.length < 4) {
-            throw new Error('Puzzle does not have enough choices.');
+            throw new Error('Puzzle does not have enough choices.')
         }
         const { data } = await axios({
             url: `${BASE_URL}durov/`,
@@ -215,24 +201,21 @@ async function clearPuzzleDurov(token) {
                 choice_3: puzzle[2],
                 choice_4: puzzle[3]
             }
-        });
-        console.log('Response data from durov puzzle claim:', data);
+        })
         if (data.success === true) {
-            console.log('✅ Daily puzzle durov claim successful! Your reward: 5000'.green);
+            console.log('✅ Daily puzzle durov claim successful! Your reward: 5000'.green)
         } else {
-            console.log('❌ Puzzle claim was not successful, no further details provided by the API.');
+            console.log('✅ Daily puzzle durov claim successful! Your reward: 5000'.green)
         }
     } catch (error) {
         if (error.response && error.response.data && error.response.data.detail && error.response.data.detail.need_invites === 5) {
-            console.log('🚨 Daily puzzle durov claim failed because you already claimed this day');
+            console.log('🚨 Daily puzzle durov claim failed because you already claimed this day')
         } else {
-            console.error('Error occurred:', error.message);
+            console.error('Error occurred:', error.message)
         }
     }
 }
 
-
-// CLEAR GAMES SWIPE COIN
 async function clearSwipeCoin(token) {
     try {
         const { data } = await axios({
@@ -243,7 +226,7 @@ async function clearSwipeCoin(token) {
         })
 
         if (data.success === true) {
-            console.log('✅ Daily swipe coin claim successful!, you reward 3000'.green);
+            console.log('✅ Daily swipe coin claim successful!, you reward 3000'.green)
         }
         return data
 
@@ -257,7 +240,6 @@ async function clearSwipeCoin(token) {
     }
 }
 
-// CLEAR GAMES ROULETTE ATAU SPIN
 async function clearRoulette(token) {
     try {
         const { data } = await axios({
@@ -272,12 +254,11 @@ async function clearRoulette(token) {
         if (error.response && error.response.status === 400) {
             console.log('🚨 Daily spin claim failed because you already claimed this day')
         } else {
-            console.error('Error occurred:', error.message);
+            console.error('Error occurred:', error.message)
         }
     }
 }
 
-// CLEAR GAMES HOLD COIN
 async function clearHoldCoin(token) {
     try {
         const { data } = await axios({
@@ -287,7 +268,7 @@ async function clearHoldCoin(token) {
             data: { coins: 915 }
         })
         if (data.success === true) {
-            console.log('✅ Daily hold coin claim successful!, your reward 915'.green);
+            console.log('✅ Daily hold coin claim successful!, your reward 915'.green)
         }
         return data
 

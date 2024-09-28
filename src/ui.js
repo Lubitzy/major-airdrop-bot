@@ -1,13 +1,13 @@
-const colors = require('colors');
+const colors = require('colors')
 
 function displayHeader() {
     console.clear();
-    console.log('=========================================='.brightWhite);
-    console.log('|          ✨ Major Airdrop Bot ✨       |'.brightWhite.bold);
-    console.log('=========================================='.brightWhite);
-    console.log('|            Created by Lubitzy          |'.brightWhite.bold);
-    console.log('|       Telegram: https://t.me/lubiqt    |'.brightWhite.bold);
-    console.log('=========================================='.brightWhite);
+    console.log('=========================================='.brightWhite)
+    console.log('|          ✨ Major Airdrop Bot ✨       |'.brightWhite.bold)
+    console.log('=========================================='.brightWhite)
+    console.log('|            Created by Lubitzy          |'.brightWhite.bold)
+    console.log('|       Telegram: https://t.me/lubiqt    |'.brightWhite.bold)
+    console.log('=========================================='.brightWhite)
     console.log();
 }
 
@@ -18,7 +18,7 @@ function askUserChoice() {
 2. Automatic Flow (Run Cron Jobs)
 0. Exit the Program
 
-Please enter your choice: `;
+Please enter your choice: `
 }
 
 function askDefaultChoice() {
@@ -29,7 +29,7 @@ function askDefaultChoice() {
 3. Auto Complete All Tasks
 0. Go Back to Main Menu
 
-Please enter your choice: `;
+Please enter your choice: `
 }
 
 module.exports = {
