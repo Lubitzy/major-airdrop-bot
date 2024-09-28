@@ -3,12 +3,12 @@ const axios = require('axios')
 
 const BASE_URL = 'https://major.bot/api/'
 
-async function getToken() {
+async function getToken(sessionKey) {
     try {
         const { data } = await axios({
             url: `${BASE_URL}auth/tg/`,
             method: 'POST',
-            data: { init_data: process.env.SESSION_KEY }
+            data: { init_data: sessionKey }
         })
         return `Bearer ${data.access_token}`
     } catch (error) {

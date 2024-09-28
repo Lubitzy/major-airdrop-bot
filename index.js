@@ -3,6 +3,7 @@ require('colors')
 const readlineSync = require('readline-sync')
 const fs = require('fs')
 const path = require('path')
+const Tabel = require('cli-table3')
 
 const { delay } = require('./src/delay')
 const {
@@ -37,11 +38,50 @@ const {
 
 const TOKEN_FILE_PATH = path.join(__dirname, 'tokenAccess.txt')
 
-const getTokenAndSave = async () => {
-    const token = await getToken();
+const getTokenAndSave = async (sessionKey) => {
+    const token = await getToken(sessionKey)
     fs.writeFileSync(TOKEN_FILE_PATH, token)
-    console.log('✅ New token has been saved\n')
+    console.log('\n✅ New token has been saved\n')
     return token
+}
+
+async function selectAccount() {
+    const sessionKeys = [
+        process.env.SESSION_KEY_1,
+        process.env.SESSION_KEY_2
+    ]
+
+    const table = new Tabel({
+        head: ['No'.white.bold, 'Name'.white.bold, 'Position'.white.bold, 'Balance'.white.bold],
+        colWidths: [5, 20, 20, 20]
+    });
+
+    const accounts = []
+
+    for (let i = 0; i < sessionKeys.length; i++) {
+        const token = await getToken(sessionKeys[i])
+        const idUser = await getIdUser(token)
+        const balance = await getBalance(token, idUser)
+        const position = await getPosition(token, idUser)
+        const username = await getUsername(token, idUser)
+        const name = `${username}`
+
+        accounts.push({ no: i + 1, name, position, balance })
+        table.push([i + 1, name, position, balance])
+    }
+
+    console.log(table.toString())
+
+    const choice = readlineSync.question('\nSelect account by number: ')
+    const selectedAccount = accounts.find(acc => acc.no === parseInt(choice))
+
+    if (selectedAccount) {
+        console.log(`🎉 You selected: ${selectedAccount.name}`)
+        return sessionKeys[selectedAccount.no - 1]
+    } else {
+        console.log('❌ Invalid choice.')
+        return null;
+    }
 }
 
 const completeTasksDaily = async (token, tasks) => {
@@ -61,16 +101,16 @@ const completeTasksNonDaily = async (token, tasks) => {
 const userChoice = async (token) => {
     try {
         while (true) {
-            const firstChoise = readlineSync.question(askUserChoice())
-            if (firstChoise === '1') {
+            const firstChoice = readlineSync.question(askUserChoice())
+            if (firstChoice === '1') {
                 while (true) {
-                    const choiseDefaultFlow = readlineSync.question(askDefaultChoice())
-                    if (choiseDefaultFlow === '1') {
+                    const choiceDefaultFlow = readlineSync.question(askDefaultChoice())
+                    if (choiceDefaultFlow === '1') {
                         console.log('🌾 Claiming daily login...')
                         await getDailyLogin(token)
                         break
                     }
-                    else if (choiseDefaultFlow === '2') {
+                    else if (choiceDefaultFlow === '2') {
                         const puzzleDurov = await getPuzzleDurov()
                         console.log('🎮 Auto playing game and claiming reward...'.yellow)
                         await clearPuzzleDurov(token, puzzleDurov)
@@ -79,43 +119,50 @@ const userChoice = async (token) => {
                         await clearSwipeCoin(token)
                         break
                     }
-                    else if (choiseDefaultFlow === '3') {
+                    else if (choiceDefaultFlow === '3') {
                         const dailyTask = await tasksDaily(token)
                         const nonDailyTask = await nonDailyTasks(token)
-                        console.log('✅ Auto completing tasks daily...'.yellow)
+                        console.log('✅ Auto completing daily tasks...'.yellow)
                         await completeTasksDaily(token, dailyTask)
-                        console.log('✅ Auto completing tasks Non daily...'.yellow)
+                        console.log('✅ Auto completing non-daily tasks...'.yellow)
                         await completeTasksNonDaily(token, nonDailyTask)
                         break
                     }
-                    else if (choiseDefaultFlow === '0') {
+                    else if (choiceDefaultFlow === '0') {
                         console.log('🔙 Returning to main menu...')
                         break
                     } else {
-                        console.log('Invalid choice, please try again.')
+                        console.log('❌ Invalid choice, please try again.')
                     }
                 }
-            } else if (firstChoise === '2') {
+            } else if (firstChoice === '2') {
                 setupCronJobDailyLogin(token)
                 setupCronJobPlayGames(token)
                 setupBalanceCheckJob(token)
-                console.log('Cron jobs are running. Application will not exit.')
+                console.log('⏰ Cron jobs are running. Application will not exit.')
                 break
-            } else if (firstChoise === '0') {
-                console.log('Exiting the script. Goodbye!')
+            } else if (firstChoice === '0') {
+                console.log('👋 Exiting the script. Goodbye!')
                 process.exit()
             }
         }
     } catch (error) {
-        console.log(error)
+        console.log('⚠️ An error occurred:', error.message)
     }
 }
+
 const main = async () => {
-    displayHeader();
+    displayHeader()
 
-    const token = await getTokenAndSave()
+    const selectedSessionKey = await selectAccount()
+    if (!selectedSessionKey) {
+        console.log('❌ No session key found. Exiting.')
+        return;
+    }
 
-    const id_user = await getIdUser(token);
+    const token = await getTokenAndSave(selectedSessionKey);
+
+    const id_user = await getIdUser(token)
     const id_squad = await getIdSquad(token, id_user)
     const username = await getUsername(token, id_user)
     const squad = await getTribe(token, id_squad)

@@ -1,14 +1,14 @@
 const colors = require('colors')
 
 function displayHeader() {
-    console.clear();
+    console.clear()
     console.log('=========================================='.brightWhite)
     console.log('|          ✨ Major Airdrop Bot ✨       |'.brightWhite.bold)
     console.log('=========================================='.brightWhite)
     console.log('|            Created by Lubitzy          |'.brightWhite.bold)
     console.log('|       Telegram: https://t.me/lubiqt    |'.brightWhite.bold)
     console.log('=========================================='.brightWhite)
-    console.log();
+    console.log()
 }
 
 function askUserChoice() {
@@ -36,4 +36,4 @@ module.exports = {
     displayHeader,
     askUserChoice,
     askDefaultChoice,
-};
+}

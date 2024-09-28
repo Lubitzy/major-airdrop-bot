@@ -50,8 +50,8 @@ async function setupCronJobPlayGames(token) {
         } catch (error) {
             console.error('Error in Play Games Cron Job:', error.message)
         }
-    });
-    job.start();
+    })
+    job.start()
     console.log('⏰ Cron job play games set up to run every 8 hours.'.bold)
 }
 
@@ -84,4 +84,4 @@ module.exports = {
     setupCronJobDailyLogin,
     setupCronJobPlayGames,
     setupBalanceCheckJob
-};
+}

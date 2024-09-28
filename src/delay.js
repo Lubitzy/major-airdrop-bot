@@ -4,4 +4,4 @@ function delay(ms) {
 
 module.exports = {
     delay,
-};
+}
